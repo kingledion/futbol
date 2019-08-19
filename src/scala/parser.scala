@@ -2,8 +2,8 @@ import scala.io.Source
 import scala.util.Try
 
 // get source data file
-val sourceFile = "/opt/futbol/champions_data.csv"
-val srcItr = Source.fromFile(filename).getLines
+val sourceFile = "/opt/futbol/data/champions_data.csv"
+val srcItr = Source.fromFile(sourceFile).getLines
 
 // remove header lines
 srcItr.next; srcItr.next

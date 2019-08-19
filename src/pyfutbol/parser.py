@@ -7,6 +7,7 @@ Created on Fri Apr 19 10:52:25 2019
 """
 
 import csv, itertools, numpy as np
+from definitions import DATAPATH
 
 def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
@@ -82,7 +83,7 @@ def getint(string):
     return int(string) if string != "" else 0
 
 
-with open("./champions_data.csv", "r") as champs_in:
+with open("{}/champions_data.csv".format(DATAPATH), "r") as champs_in:
     champs_rdr = csv.reader(champs_in)
     
     next(champs_rdr)
@@ -106,7 +107,7 @@ with open("./champions_data.csv", "r") as champs_in:
         
         all_data[name] = data
         
-with open("./europa_data.csv", "r") as europa_in:
+with open("{}/europa_data.csv".format(DATAPATH), "r") as europa_in:
     europa_rdr = csv.reader(europa_in)
     
     next(europa_rdr)

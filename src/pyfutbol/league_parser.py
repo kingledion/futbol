@@ -7,6 +7,7 @@ Created on Sat Jun  1 14:02:53 2019
 """
 
 import csv, itertools, numpy as np
+from definitions import DATAPATH
 
 def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
@@ -29,7 +30,7 @@ yr_rng = range(2019, 2005, -1)
 all_data = {}
 
 
-with open("./league_standing.csv", "r") as league_in:
+with open("{}/league_standing.csv".format(DATAPATH), "r") as league_in:
     league_rdr = csv.reader(league_in)
     
     next(league_rdr)
