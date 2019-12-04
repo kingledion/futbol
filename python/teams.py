@@ -6,8 +6,11 @@ Created on Sun Dec  1 13:25:31 2019
 @author: dhartig
 """
 
+#from scipy.stats import skellam
+
 GAME_IMPORTANCE_FACTOR = 10
 MAX_WIN = 3
+PPG = 1.34
 
 class Team:
        
@@ -26,3 +29,7 @@ class Team:
     def score(self, game_rating):
         game_rating = max(-1*MAX_WIN, min(game_rating, MAX_WIN))
         self.rating = self.rating + game_rating / GAME_IMPORTANCE_FACTOR
+        
+    def predict_pts(self, awayteam):
+        
+        return {self.name: 1, awayteam.name: 1}

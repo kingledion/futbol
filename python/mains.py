@@ -12,6 +12,15 @@ teams, league_years = getTeamMap()
 
 resolveGames(teams, league_years)
 
-print()
+
 for lg in league_years.values():
-    lg.print_table()
+    print()
+    print("Current Table")
+    
+    lg.print_current_table()
+
+for lg in league_years.values():
+    print()
+    print("Predicted Final Table")
+    
+    lg.print_predicted_table()

@@ -9,16 +9,20 @@ Created on Sun Dec  1 13:28:29 2019
 from teams import Team
 from warnings import warn
 
+# move all math to teams!!! Move games to teams???
 HOMEFIELD_GOAL_ADV = 0.38
 
 class Game:
     
-    def __init__(self, date, hometeam, awayteam, homescore, awayscore):
+    def __init__(self, date, hometeam: Team, awayteam: Team, homescore, awayscore):
         self.date = date
         self.hometeam = hometeam
         self.awayteam = awayteam
         self.homescore = homescore
         self.awayscore = awayscore
+        
+    def __repr__(self):
+        return "{} {}, {} {}".format(self.hometeam.name, self.homescore, self.awayteam.name, self.awayscore)
         
     def getPoints(self):
         if self.homescore > self.awayscore:
@@ -89,8 +93,11 @@ class League:
         
         # record the game in this league
         self.games_played.append(this_game)
+        
+    def print_current_table(self):
+        print_table(*self.get_points(), rating_vals = {tm.name: tm.rating for tm in self.teams.values()})
 
-    def print_table(self):
+    def get_points(self):
         table_dict = {}
         played_dict = {}
         
@@ -99,15 +106,45 @@ class League:
             for name, pts in g.getPoints().items():
                 table_dict[name] = table_dict.get(name, 0) + pts
                 played_dict[name] = played_dict.get(name, 0) + 1
-                
-        # make list sorted by points
-        table_list = [(name, pts) for name, pts in table_dict.items()]
-
-        # add team ratingsratings
-        table_list = sorted([(name, played_dict[name], pts, self.teams[name].rating) for name, pts in table_list], key = lambda tpl: (tpl[2], tpl[3]), reverse = True)
+        return table_dict, played_dict
+            
+    def print_predicted_table(self):
         
-        # print
-        for name, plyd, pts, rating in table_list:
-            print("{:<25}{:<4}{:<5}".format(name, str(plyd), str(pts)), "{:5.2f}".format(rating))
+        table_dict, played_dict = self.get_points()
+        
+        team_set = set(self.teams.keys())
+        
+        completed_game_tree = {}
+        for g in self.games_played:
+            completed_game_tree[g.hometeam.name] = completed_game_tree.get(g.hometeam.name, set([])) | {g.awayteam.name}
+            
+        for home_tm, prev_opps in completed_game_tree.items():
+
+            tm_results = [self.teams[home_tm].predict_pts(self.teams[away_tm]) for away_tm in team_set if away_tm not in prev_opps | {home_tm}]
+                
+            for rslt in tm_results:
+                for name, pts in rslt.items():
+                    table_dict[name] = table_dict.get(name, 0) + pts
+                    played_dict[name] = played_dict.get(name, 0) + 1
+                    
+        print_table(table_dict, played_dict)
+            
+            
+def print_table(table_dict, played_dict, rating_vals = None):
+            
+    # make list sorted by points
+    table_list = [(name, pts) for name, pts in table_dict.items()]
+
+    # add team ratingsratings
+    table_list = sorted([(name, played_dict[name], pts) for name, pts in table_list], key = lambda tpl: (tpl[2]), reverse = True)
+    
+    # print
+    for name, plyd, pts in table_list:
+        if rating_vals:
+            print("{:<25}{:<4}{:<5}".format(name, str(plyd), str(pts)), "{:5.2f}".format(rating_vals[name]))
+        else:
+            print("{:<25}{:<4}{:<5}".format(name, str(plyd), str(pts)))
+                
+                
         
     
