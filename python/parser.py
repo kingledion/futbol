@@ -44,7 +44,7 @@ def getTeamMap(filename = "/opt/futbol/data/teams.csv"):
     return teams, league_years
 
 
-def resolveGames(teams, leagues, filename = "/opt/futbol/data/games.csv"):
+def resolveGames(teams, leagues, filename, leaguename):
     
     def getOrExcept(group_object, name):
         try:
@@ -58,7 +58,7 @@ def resolveGames(teams, leagues, filename = "/opt/futbol/data/games.csv"):
         game_rdr = csv.reader(games_in)
         next(game_rdr)
         
-        for date, leaguename, homename, awayname, homescore, awayscore in game_rdr:
+        for date, homename, awayname, homescore, awayscore in game_rdr:
             date = datetime.datetime.strptime(date, "%m/%d/%y").date()
             
             league = getOrExcept(leagues, (leaguename, "2019-2020"))

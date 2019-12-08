@@ -12,7 +12,7 @@ from math import pow
 
 HOMEFIELD_GOAL_ADV = 0.38
 
-GAME_IMPORTANCE_FACTOR = 10
+GAME_IMPORTANCE_FACTOR = 25
 MAX_POINT_DIFF = 3
 PPG = 1.34
 
@@ -23,7 +23,7 @@ class Team:
         self.o_rating = PPG
         self.d_rating = PPG
         
-        print("Creating new team: {}".format(self.name))
+        #print("Creating new team: {}".format(self.name))
         
     def __repr__(self):
         return "Team({})".format(self.name)

@@ -77,7 +77,8 @@ class League:
         
     def print_current_table(self):
         o_ratings, d_ratings = {tm.name: tm.o_rating for tm in self.teams.values()}, {tm.name: tm.d_rating for tm in self.teams.values()}
-        print_table(*self.get_points(), o_ratings, d_ratings)
+        diff_ratings = {tm.name: tm.o_rating - tm.d_rating for tm in self.teams.values()}
+        print_table(*self.get_points(), o_ratings, d_ratings, diff_ratings)
 
     def get_points(self):
         table_dict = {}
@@ -100,7 +101,8 @@ class League:
         for g in self.games_played:
             completed_game_tree[g.hometeam.name] = completed_game_tree.get(g.hometeam.name, set([])) | {g.awayteam.name}
             
-        for home_tm, prev_opps in completed_game_tree.items():
+        for home_tm in team_set:
+            prev_opps = completed_game_tree.get(home_tm, set({}))
 
             tm_results = [predict_pts(self.teams[home_tm], self.teams[away_tm]) for away_tm in team_set if away_tm not in prev_opps | {home_tm}]
                 
@@ -123,7 +125,7 @@ def print_table(table_dict, played_dict, *ratings):
     table_list = sorted([(name, played_dict[name], pts) for name, pts in table_list], key = lambda tpl: (tpl[2]), reverse = True)
     
     # print
-    row_format = "{:<25}{:<4}{:<5}" + "{:5.2f}"*len(ratings)
+    row_format = "{:<25}{:<4}{:<5}" + "{:5.1f}"*len(ratings)
     for name, plyd, pts in table_list:
         row_vals = [name, str(plyd), str(pts)] + [rating_col[name] for rating_col in ratings]
         print(row_format.format(*row_vals))
