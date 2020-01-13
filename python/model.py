@@ -169,6 +169,7 @@ class TeamList:
 
     def _add(self, teamname):
         self.teams[teamname] = Team(teamname)
+        print("Added new team {}".format(teamname))
 
     def getOrAdd(self, teamname):
         if teamname not in self.teams:
@@ -197,7 +198,7 @@ class League:
         for team in newteams:
             if team.name not in self.teamlist:
                 self.teamlist[team.name] = team
-                print("Added {} to {}".format(team, self))
+                #print("Added {} to {}".format(team, self))
 
 
     def __repr__(self):
@@ -278,3 +279,5 @@ def print_table(table_dict, played_dict, *ratings):
     for name, plyd, pts in table_list:
         row_vals = [name, str(plyd), str(pts)] + [rating_col[name] for rating_col in ratings]
         print(row_format.format(*row_vals))
+
+EXTRA_LEAGUE = League("Extra", "All_years")
