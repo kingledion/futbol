@@ -154,7 +154,7 @@ class Team:
         self.o_rating = PPG if off_rating is None else off_rating
         self.d_rating = PPG if def_rating is None else def_rating
 
-        #print("Creating new team: {}".format(self.name))
+        #print("Creating new team: {}, {}, {}".format(self.name, self.o_rating, self.d_rating))
 
     def __repr__(self):
         return "Team({})".format(self.name)
@@ -167,13 +167,13 @@ class TeamList:
     def __init__(self, *teams):
         self.teams = {t.name: t for t in teams}
 
-    def _add(self, teamname):
-        self.teams[teamname] = Team(teamname)
-        print("Added new team {}".format(teamname))
+    def _add(self, teamname, default):
+        self.teams[teamname] = Team(teamname, *default) if default else Team(teamname)
+        print("Added new team {} {}".format(teamname, default))
 
-    def getOrAdd(self, teamname):
+    def getOrAdd(self, teamname, default = None):
         if teamname not in self.teams:
-            self._add(teamname)
+            self._add(teamname, default)
         return self.teams[teamname]
 
 class League:
@@ -185,14 +185,26 @@ class League:
         self.games_played = []
         self.games_future = []
 
+        self.relegation_quality = None
+
         print("Initialized a new league:", self)
 
-    def getLeagueQuality(self):
+    # def getLeagueQuality(self):
+    #
+    #     offense = [team.o_rating for team in self.teamlist]
+    #     defense = [team.d_rating for team in self.teamlist]
+    #
+    #     return mean(offense), mean(defense)
 
-        offense = [team.o_rating for team in self.teamlist]
-        defense = [team.d_rating for team in self.teamlist]
+    def getRelegationQuality(self, half = True):
+
+        numTeams = int(len(self.teamlist)/2) if half else 3
+
+        offense = sorted([team.o_rating for team in self.teamlist.values()])[:numTeams]
+        defense = sorted([team.d_rating for team in self.teamlist.values()])[-numTeams:]
 
         return mean(offense), mean(defense)
+
 
     def _addTeams(self, *newteams):
         for team in newteams:

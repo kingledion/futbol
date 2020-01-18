@@ -3,12 +3,15 @@
 
 
 import csv, datetime
-from model import TeamList, League, GameList, Game, EXTRA_LEAGUE
+from model import TeamList, League, GameList, Game, EXTRA_LEAGUE, PPG
+import season_map
 
-def parseSeason(teamlist: TeamList, filename, leaguename, leagueyear):
+def parseSeason(teamlist: TeamList, prev_leagues, filename, leaguename, leagueyear, initial = False):
 
     league = League(leaguename, leagueyear)
     gamelist = GameList()
+
+    default = (PPG, PPG) if initial else season_map.default_quality(league, prev_leagues)
 
     with open(filename) as games_in:
 
@@ -17,7 +20,8 @@ def parseSeason(teamlist: TeamList, filename, leaguename, leagueyear):
         row = next(game_rdr)
 
         table_formats = set([])
-        if row == ['Wk', 'Day', 'Date', 'Time', 'Home', 'Score', 'Away', 'Attendance', 'Venue', 'Referee', 'Match Report', 'Notes']:
+        if row == ['Wk', 'Day', 'Date', 'Time', 'Home', 'Score', 'Away', 'Attendance', 'Venue', 'Referee', 'Match Report', 'Notes'] or \
+                row == ['Round', 'Day', 'Date', 'Time', 'Home', 'Score', 'Away', 'Attendance', 'Venue', 'Referee', 'Match Report', 'Notes']:
             pass
         elif row == ['Wk', 'Day', 'Date', 'Time', 'Home', 'xG', 'Score', 'xG', 'Away', 'Attendance', 'Venue', 'Referee', 'Match Report', 'Notes']:
             table_formats = {"XG"}
@@ -50,8 +54,8 @@ def parseSeason(teamlist: TeamList, filename, leaguename, leagueyear):
             except:
                 continue
 
-            hometeam = teamlist.getOrAdd(homename)
-            awayteam = teamlist.getOrAdd(awayname)
+            hometeam = teamlist.getOrAdd(homename, default)
+            awayteam = teamlist.getOrAdd(awayname, default)
 
             # parse scores if they exist
             try:
