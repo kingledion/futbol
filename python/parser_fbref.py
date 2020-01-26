@@ -6,10 +6,9 @@ import csv, datetime
 from model import TeamList, League, GameList, Game, EXTRA_LEAGUE, PPG
 import season_map
 
-def parseSeason(teamlist: TeamList, prev_leagues, filename, leaguename, leagueyear, initial = False):
+def parseSeason(teamlist: TeamList, gamelist: GameList, prev_leagues, filename, leaguename, leagueyear, initial = False):
 
     league = League(leaguename, leagueyear)
-    gamelist = GameList()
 
     default = (PPG, PPG) if initial else season_map.default_quality(league, prev_leagues)
 
@@ -47,6 +46,10 @@ def parseSeason(teamlist: TeamList, prev_leagues, filename, leaguename, leagueye
                 else:
                     gamedate, homename, score, awayname = row[2], row[4], row[5], row[6]
                     homexg = awayxg = rg_season = None
+
+            if leaguename in ["champs"]:
+                homename = " ".join(homename.split(" ")[:-1])
+                awayname = " ".join(awayname.split(" ")[1:])
 
 
             try:

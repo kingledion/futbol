@@ -5,7 +5,7 @@ import itertools
 
 all_seasons = ["2014_2015", "2015_2016", "2016_2017", "2017_2018", "2018_2019", "2019_2020"]
 
-
+# Assumption, leagues are listed in order of ascending importance
 national_leagues = {
 "italy": ["serie_a", "serie_b"],
 "germany": ["bdslga", "bdslga_2"],
@@ -15,7 +15,10 @@ national_leagues = {
 all_lgs = list(itertools.chain(*national_leagues.values()))
 
 national_cups = {
-"italy": ["coppa_italia", ]
+"italy": ["coppa_italia", ],
+"germany": ["dfb_pokal", ],
+"spain": ["copa_rey"],
+"uefa": ["champs"]
 }
 
 league_lookup = {}
@@ -26,9 +29,10 @@ for nation in list(national_leagues.keys()) + list(national_cups.keys()):
         league_lookup[lg] = nation
 
 national_default = {
+"uefa": (1.34, 1.34),
 "italy": (1.00, 1.66),
-"germany": (1.0, 1.5),
-"spain": (1.0, 1.5)
+"germany": (1.09, 1.71),
+"spain": (0.93, 1.49)
 }
 
 def default_quality(lg, league_map):
@@ -55,8 +59,8 @@ def previous_year(year):
     else:
         return all_seasons[i-1]
 
-season_list = national_leagues["italy"] + national_cups["italy"]
-#season_list = list(itertools.chain(*(national_leagues.values() + national_cups.values()))
+#season_list = national_cups["uefa"]
+season_list = list(itertools.chain(*(list(national_leagues.values()) + list(national_cups.values()))))
 
 def remove_from_list(original_list, elements_to_remove):
     return [el for el in original_list if el not in set(elements_to_remove)]
