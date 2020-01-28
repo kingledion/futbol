@@ -6,7 +6,7 @@ import csv, datetime
 from model import TeamList, League, GameList, Game, EXTRA_LEAGUE, PPG
 import season_map
 
-def parseSeason(teamlist: TeamList, gamelist: GameList, prev_leagues, filename, leaguename, leagueyear, initial = False):
+def parseSeason(teamlist: TeamList, gamelist: GameList, prev_leagues, filename, leaguename, leagueyear, initial = False, is_lg = True):
 
     league = League(leaguename, leagueyear)
 
@@ -57,8 +57,8 @@ def parseSeason(teamlist: TeamList, gamelist: GameList, prev_leagues, filename, 
             except:
                 continue
 
-            hometeam = teamlist.getOrAdd(homename, default)
-            awayteam = teamlist.getOrAdd(awayname, default)
+            hometeam = teamlist.getOrAdd(homename, default, is_lg)
+            awayteam = teamlist.getOrAdd(awayname, default, is_lg)
 
             # parse scores if they exist
             try:

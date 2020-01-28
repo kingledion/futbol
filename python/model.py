@@ -171,7 +171,7 @@ class TeamList:
         self.teams[teamname] = Team(teamname, *default) if default else Team(teamname)
         print("Added new team {} {}".format(teamname, default))
 
-    def getOrAdd(self, teamname, default = None):
+    def getOrAdd(self, teamname, default = None, is_lg = True):
         if teamname not in self.teams:
             self._add(teamname, default)
         return self.teams[teamname]

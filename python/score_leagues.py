@@ -25,7 +25,7 @@ def main():
             initial = lg_year == season_map.all_seasons[0] and lg_name in season_map.all_lgs
             #print("initial: ", initial)
 
-            teamlist, league, gamelist = parseSeason(teamlist, gamelist, league_map, filename = filename, leagueyear=lg_year, leaguename=lg_name, initial= initial)
+            teamlist, league, gamelist = parseSeason(teamlist, gamelist, league_map, filename = filename, leagueyear=lg_year, leaguename=lg_name, initial= initial, is_lg = lg_name in season_map.all_lgs)
             league_map[(lg_name, lg_year)] = league
 
         for game in gamelist.order():
@@ -49,7 +49,7 @@ def main():
 
 def print_team_list(teamlist):
 
-    ordered_teams = sorted(teamlist.teams.values(), key = lambda tm: tm.o_rating / tm.d_rating, reverse=True)
+    ordered_teams = sorted(teamlist.teams.values(), key = lambda tm: tm.o_rating / tm.d_rating, reverse=True)[:25]
     print()
     for tm in ordered_teams:
         str_fmt = "{:<25}" + "{:5.1f}"*3
