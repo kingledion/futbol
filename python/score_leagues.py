@@ -35,21 +35,21 @@ def main():
         print_team_list(teamlist)
 
 
-    for lg_name in season_map.season_map[lg_year]:
-
-        if lg_name in season_map.all_lgs:
-
-            league = league_map[lg_name, lg_year]
-            print()
-            print("Predicted Final Table")
-            league.print_predicted_table()
-
-            print()
-            print(league.getRelegationQuality())
+    # for lg_name in season_map.season_map[lg_year]:
+    #
+    #     if lg_name in season_map.all_lgs:
+    #
+    #         league = league_map[lg_name, lg_year]
+    #         print()
+    #         print("Predicted Final Table")
+    #         league.print_predicted_table()
+    #
+    #         print()
+    #         print(league.getRelegationQuality())
 
 def print_team_list(teamlist):
 
-    ordered_teams = sorted(teamlist.teams.values(), key = lambda tm: tm.o_rating / tm.d_rating, reverse=True)[:25]
+    ordered_teams = sorted(teamlist.teams.values(), key = lambda tm: tm.o_rating / tm.d_rating, reverse=True)[:50]
     print()
     for tm in ordered_teams:
         str_fmt = "{:<25}" + "{:5.1f}"*3
@@ -59,8 +59,8 @@ def print_team_list(teamlist):
 
 def print_all_leagues(lg_year, league_map, season_map):
         for lg_name in season_map.season_map[lg_year]:
-
-            if lg_name in ["serie_a", "bdslga", "la_liga"]:
+            if lg_name in season_map.all_lgs:
+            #if lg_name in ["serie_a", "bdslga", "la_liga", "eng_prem"]:
 
                 league = league_map[lg_name, lg_year]
 

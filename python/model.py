@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import math
+
 from scipy.stats import skellam
 from statistics import mean
 
@@ -172,8 +174,13 @@ class TeamList:
         print("Added new team {} {}".format(teamname, default))
 
     def getOrAdd(self, teamname, default = None, is_lg = True):
+
         if teamname not in self.teams:
-            self._add(teamname, default)
+            if is_lg:
+                self._add(teamname, default)
+            else:
+                #print("New single use team {} {}".format(teamname, default))
+                return Team(teamname, *default)
         return self.teams[teamname]
 
 class League:
@@ -228,7 +235,7 @@ class League:
 
     def print_current_table(self):
         o_ratings, d_ratings = {tm.name: tm.o_rating for tm in self.teamlist.values()}, {tm.name: tm.d_rating for tm in self.teamlist.values()}
-        diff_ratings = {tm.name: tm.o_rating - tm.d_rating for tm in self.teamlist.values()}
+        diff_ratings = {tm.name: math.log(tm.o_rating / tm.d_rating) for tm in self.teamlist.values()}
         print_table(*self.get_points(), o_ratings, d_ratings, diff_ratings)
 
     def get_points(self):

@@ -78,7 +78,7 @@ def parseSeason(teamlist: TeamList, gamelist: GameList, prev_leagues, filename, 
                 home_xg = away_xg = None
 
             # Make this a game
-            lg = EXTRA_LEAGUE if rg_season and rg_season != "Regular Season" else league
+            lg = EXTRA_LEAGUE if is_lg and rg_season and rg_season != "Regular Season" else league
             game = Game(date, lg, hometeam, awayteam)
             if not (homescore is None):
                 game.score(homescore, awayscore, home_xg, away_xg)
